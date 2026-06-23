@@ -1,0 +1,22 @@
+{
+  "name": "coffee-shop-management-backend",
+  "version": "1.0.0",
+  "description": "Backend API MVC untuk website manajemen coffee shop dengan PostgreSQL",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": ["coffee-shop", "express", "postgresql", "mvc", "crud"],
+  "author": "Axell Ramadhani",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
