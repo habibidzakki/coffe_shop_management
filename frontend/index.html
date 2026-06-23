@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EspressoPro Dashboard - Professional</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#656357",
+                    "secondary-fixed": "#e7e2d4",
+                    "secondary-container": "#e4dfd1",
+                    "on-tertiary-fixed-variant": "#404a39",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#cbc6b8",
+                    "on-primary": "#ffffff",
+                    "primary": "#271310",
+                    "secondary": "#615e53",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e4e2e1",
+                    "outline-variant": "#d3c3c0",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-container": "#3e2723",
+                    "tertiary-fixed-dim": "#bfcab4",
+                    "on-primary-container": "#ae8d87",
+                    "on-background": "#1b1c1c",
+                    "background": "#fcf9f8",
+                    "surface-container-low": "#f6f3f2",
+                    "surface-container-highest": "#e4e2e1",
+                    "surface-tint": "#745853",
+                    "tertiary": "#121b0d",
+                    "surface-container": "#f0eded",
+                    "on-tertiary-container": "#8d9884",
+                    "inverse-surface": "#303030",
+                    "on-tertiary-fixed": "#151e10",
+                    "tertiary-container": "#263020",
+                    "inverse-primary": "#e3beb8",
+                    "on-surface-variant": "#504442",
+                    "surface-dim": "#dcd9d9",
+                    "surface-container-high": "#eae7e7",
+                    "surface-bright": "#fcf9f8",
+                    "surface": "#fcf9f8",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#2b1613",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#827472",
+                    "inverse-on-surface": "#f3f0f0",
+                    "primary-fixed-dim": "#e3beb8",
+                    "on-secondary-fixed": "#1d1c13",
+                    "on-secondary-fixed-variant": "#49473c",
+                    "tertiary-fixed": "#dbe6cf",
+                    "on-surface": "#1b1c1c",
+                    "primary-fixed": "#ffdad4",
+                    "on-primary-fixed-variant": "#5b403c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.375rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-mobile": "12px",
+                    "stack-sm": "4px",
+                    "unit": "4px",
+                    "gutter": "16px",
+                    "stack-md": "12px",
+                    "stack-lg": "24px",
+                    "container-padding-desktop": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Hanken Grotesk"],
+                    "numeric-data": ["Hanken Grotesk"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-sm": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "label-caps": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "numeric-data": ["24px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["15px", {"lineHeight": "22px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-caps": ["11px", {"lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Hanken Grotesk', sans-serif;
+            background-color: #fcf9f8;
+            color: #1b1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+        }
+        .card-shadow {
+            box-shadow: 0 1px 3px rgba(39, 19, 16, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d3c3c0; border-radius: 4px; }
+        
+        .toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            background: #271310;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 14px;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: 0.25s;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        [data-view] { display: none; }
+        [data-view].active { display: block; }
+    </style>
+</head>
+<body class="bg-background text-on-background pb-20 md:pb-0 md:pl-56 lg:pl-64 min-h-screen">
+
+<header class="fixed top-0 right-0 left-0 md:left-56 lg:left-64 z-50 flex justify-between items-center px-container-padding-mobile h-14 bg-background border-b border-outline-variant/30">
+  <div class="flex items-center gap-2">
+    <button class="md:hidden material-symbols-outlined text-primary text-xl" onclick="toggleMobileMenu()">menu</button>
+    <span class="material-symbols-outlined text-primary text-xl hidden md:inline">coffee</span>
+    <h1 class="font-headline-md text-primary font-bold uppercase tracking-wider text-[14px]">EspressoPro <span class="font-normal opacity-50 ml-1">v3.0.0</span></h1>
+  </div>
+  <div class="flex items-center gap-3">
+    <div class="w-7 h-7 rounded-lg overflow-hidden border border-outline-variant bg-primary text-white flex items-center justify-center font-bold text-xs">
+      AD
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Sidebar Overlay -->
+<div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="toggleMobileMenu()"></div>
+
+<aside id="sidebar" class="fixed top-0 left-0 h-full w-56 lg:w-64 flex-col bg-primary-container text-surface-container-lowest border-r border-primary/20 p-5 gap-6 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+  <div class="flex items-center gap-2 mb-2 justify-between">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-inverse-primary text-2xl">coffee</span>
+      <h1 class="font-headline-md text-inverse-primary font-bold tracking-tight">EspressoPro</h1>
+    </div>
+    <button class="md:hidden material-symbols-outlined text-white" onclick="toggleMobileMenu()">close</button>
+  </div>
+  <nav class="flex flex-col gap-1 mt-6">
+    <a href="#" onclick="switchView('dashboard', this)" class="nav-link active flex items-center gap-3 bg-white/10 text-white rounded-lg px-3 py-2.5 font-medium transition-all">
+      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+      <span class="font-body-sm">Dashboard</span>
+    </a>
+    <a href="#" onclick="switchView('menu', this)" class="nav-link flex items-center gap-3 text-white/70 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors">
+      <span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+      <span class="font-body-sm">Data Menu</span>
+    </a>
+    <a href="#" onclick="switchView('ingredients', this)" class="nav-link flex items-center gap-3 text-white/70 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors">
+      <span class="material-symbols-outlined text-[20px]">kitchen</span>
+      <span class="font-body-sm">Bahan Baku</span>
+    </a>
+    <a href="#" onclick="switchView('tables', this)" class="nav-link flex items-center gap-3 text-white/70 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors">
+      <span class="material-symbols-outlined text-[20px]">table_restaurant</span>
+      <span class="font-body-sm">Data Meja</span>
+    </a>
+    <a href="#" onclick="switchView('customers', this)" class="nav-link flex items-center gap-3 text-white/70 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors">
+      <span class="material-symbols-outlined text-[20px]">group</span>
+      <span class="font-body-sm">Data Pelanggan</span>
+    </a>
+    <a href="#" onclick="switchView('baristas', this)" class="nav-link flex items-center gap-3 text-white/70 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors">
+      <span class="material-symbols-outlined text-[20px]">badge</span>
+      <span class="font-body-sm">Barista / Kasir</span>
+    </a>
+    <a href="#" onclick="switchView('orders', this)" class="nav-link flex items-center gap-3 text-white/70 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors">
+      <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+      <span class="font-body-sm">Transaksi Pesanan</span>
+    </a>
+  </nav>
+</aside>
+
+<main class="pt-14 px-container-padding-mobile md:px-container-padding-desktop max-w-full mx-auto">
+  
+  <!-- VIEW: DASHBOARD -->
+  <section data-view="dashboard" id="view-dashboard" class="active mt-4">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between border-b border-outline-variant/30 pb-4 mb-6">
+      <div>
+        <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Welcome, Admin!</h2>
+        <div class="flex items-center gap-2 text-on-surface-variant mt-0.5">
+          <p class="font-body-sm">Berikut adalah ringkasan performa coffee shop Anda hari ini.</p>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3 md:mt-0">
+        <select id="revenueFilter" onchange="loadDashboard()" class="bg-surface-container-high px-3 py-1.5 rounded-lg font-label-caps border border-outline-variant outline-none cursor-pointer">
+          <option value="today">HARI INI</option>
+          <option value="week">7 HARI TERAKHIR</option>
+          <option value="month">BULAN INI</option>
+          <option value="all">SEMUA WAKTU</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+      <div class="bg-white p-4 rounded-lg card-shadow border border-outline-variant/40 group">
+        <div class="flex justify-between items-start mb-2">
+          <p class="font-label-caps text-on-secondary-container">TOTAL MENU</p>
+          <span class="material-symbols-outlined text-on-surface-variant text-[18px]">restaurant_menu</span>
+        </div>
+        <p id="dashTotalMenu" class="font-numeric-data text-headline-md text-primary">0</p>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg card-shadow border border-outline-variant/40 group">
+        <div class="flex justify-between items-start mb-2">
+          <p class="font-label-caps text-on-secondary-container">TOTAL PELANGGAN</p>
+          <span class="material-symbols-outlined text-on-surface-variant text-[18px]">group</span>
+        </div>
+        <p id="dashTotalCustomers" class="font-numeric-data text-headline-md text-primary">0</p>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg card-shadow border border-outline-variant/40 group">
+        <div class="flex justify-between items-start mb-2">
+          <p class="font-label-caps text-on-secondary-container">TOTAL PESANAN</p>
+          <span class="material-symbols-outlined text-on-surface-variant text-[18px]">receipt_long</span>
+        </div>
+        <p id="dashTotalOrders" class="font-numeric-data text-headline-md text-primary">0</p>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg card-shadow border border-outline-variant/40 group border-l-4 border-l-primary">
+        <div class="flex justify-between items-start mb-2">
+          <p class="font-label-caps text-on-secondary-container">TOTAL OMZET</p>
+          <span class="material-symbols-outlined text-primary text-[18px]">payments</span>
+        </div>
+        <p id="dashTotalRevenue" class="font-numeric-data text-headline-md text-primary">Rp 0</p>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4 mt-6">
+      <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40">
+        <h3 class="font-headline-md text-primary mb-4">Pendapatan Harian</h3>
+        <div class="relative h-[250px] w-full">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+      <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40">
+        <h3 class="font-headline-md text-primary mb-4">Top 5 Menu Terlaris</h3>
+        <div class="relative h-[250px] w-full">
+          <canvas id="bestSellersChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: MENU -->
+  <section data-view="menu" id="view-menu" class="mt-4">
+    <div class="flex justify-between items-end border-b border-outline-variant/30 pb-4 mb-6">
+      <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Data Menu</h2>
+      <button onclick="resetMenuForm()" class="text-xs bg-surface-container-high px-3 py-1.5 rounded-lg font-bold border border-outline-variant hover:bg-surface-container-highest transition-colors">RESET FORM</button>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40 mb-6">
+      <form id="menuForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">ID PRODUK</label>
+          <input type="text" id="menuId" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-surface-container-low" placeholder="Contoh: PRD001" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">NAMA MENU</label>
+          <input type="text" id="menuName" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="Iced Latte" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">KATEGORI</label>
+          <select id="categoryId" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white">
+            <option value="" disabled selected>Pilih Kategori</option>
+            <option value="Coffee">Coffee</option>
+            <option value="Non-Coffee">Non-Coffee</option>
+            <option value="Tea">Tea</option>
+            <option value="Snack">Snack</option>
+            <option value="Food">Food</option>
+            <option value="Dessert">Dessert</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">HARGA</label>
+          <input type="number" id="menuPrice" min="0" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="25000" />
+        </div>
+        <div class="lg:col-span-5 flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">PENJELASAN PRODUK (DESCRIPTION)</label>
+          <textarea id="menuDescription" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary w-full" rows="2" placeholder="Kopi hitam pekat dengan rasa mantap"></textarea>
+        </div>
+        <div class="lg:col-span-5 flex flex-col gap-2 mt-2">
+          <label class="font-label-caps text-on-surface-variant border-b border-outline-variant/30 pb-1">RESEP / INGREDIENTS</label>
+          <div id="recipeBuilder" class="flex flex-col gap-2">
+            <!-- Dynamic rows will be added here -->
+          </div>
+          <button type="button" onclick="addRecipeRow()" class="text-xs self-start bg-surface-container-high px-3 py-1.5 rounded-lg font-bold border border-outline-variant hover:bg-surface-container-highest transition-colors mt-1">+ Tambah Bahan</button>
+        </div>
+        <div class="flex flex-col gap-1 hidden">
+          <input type="number" id="menuStock" value="99" />
+          <select id="menuAvailable"><option value="true">Tersedia</option></select>
+        </div>
+        <div class="lg:col-span-5 flex justify-end mt-4 border-t border-outline-variant/30 pt-4">
+          <button type="submit" class="bg-primary text-white px-5 py-2 rounded-lg font-bold text-sm w-full md:w-auto hover:bg-primary/90 transition-colors">SIMPAN MENU</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-white rounded-lg card-shadow border border-outline-variant/40 overflow-hidden">
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[700px]">
+          <thead>
+            <tr class="bg-surface-container-low border-b border-outline-variant/30">
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">ID</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">MENU</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">KATEGORI</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">HARGA</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">STOK</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">STATUS</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant text-right">AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="menuTable" class="divide-y divide-outline-variant/10 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: CUSTOMERS -->
+  <section data-view="customers" id="view-customers" class="mt-4">
+    <div class="flex justify-between items-end border-b border-outline-variant/30 pb-4 mb-6">
+      <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Data Pelanggan</h2>
+      <button onclick="resetCustomerForm()" class="text-xs bg-surface-container-high px-3 py-1.5 rounded-lg font-bold border border-outline-variant hover:bg-surface-container-highest transition-colors">RESET FORM</button>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40 mb-6">
+      <form id="customerForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+        <input type="hidden" id="customerId" />
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">NAMA PELANGGAN</label>
+          <input type="text" id="customerName" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="Budi Santoso" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">NO. HP</label>
+          <input type="text" id="customerPhone" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="08xxxxxxxxxx" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">EMAIL</label>
+          <input type="email" id="customerEmail" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="budi@mail.com" />
+        </div>
+        <div class="md:col-span-3 flex justify-end">
+          <button type="submit" class="bg-primary text-white px-5 py-2 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors">SIMPAN PELANGGAN</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-white rounded-lg card-shadow border border-outline-variant/40 overflow-hidden">
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[600px]">
+          <thead>
+            <tr class="bg-surface-container-low border-b border-outline-variant/30">
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">ID</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">NAMA</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">NO HP</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">EMAIL</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant text-right">AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="customerTable" class="divide-y divide-outline-variant/10 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: ORDERS -->
+  <section data-view="orders" id="view-orders" class="mt-4">
+    <div class="flex justify-between items-end border-b border-outline-variant/30 pb-4 mb-6">
+      <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Transaksi Pesanan</h2>
+      <button onclick="clearCart()" class="text-xs bg-surface-container-high px-3 py-1.5 rounded-lg font-bold border border-outline-variant hover:bg-surface-container-highest text-error transition-colors">KOSONGKAN KERANJANG</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <!-- Order Form -->
+      <div class="lg:col-span-2 bg-white p-5 rounded-lg card-shadow border border-outline-variant/40">
+        <form id="orderForm" class="flex flex-col gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex flex-col gap-1">
+              <label class="font-label-caps text-on-surface-variant">PELANGGAN</label>
+              <select id="orderCustomer" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white"></select>
+            </div>
+            <div class="flex flex-col gap-1">
+              <label class="font-label-caps text-on-surface-variant">MEJA</label>
+              <select id="orderMeja" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white"></select>
+            </div>
+            <div class="flex flex-col gap-1">
+              <label class="font-label-caps text-on-surface-variant">KASIR</label>
+              <select id="orderEmployee" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white"></select>
+            </div>
+          </div>
+          <hr class="border-outline-variant/30 my-2" />
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div class="flex flex-col gap-1 md:col-span-2">
+              <label class="font-label-caps text-on-surface-variant">PILIH MENU</label>
+              <select id="orderMenu" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white"></select>
+            </div>
+            <div class="flex flex-col gap-1">
+              <label class="font-label-caps text-on-surface-variant">QTY</label>
+              <input type="number" id="orderQuantity" value="1" min="1" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" />
+            </div>
+          </div>
+          <div>
+            <button type="button" onclick="addToCart()" class="w-full bg-surface-container-high border border-outline-variant text-primary px-4 py-2 rounded-lg font-bold text-sm hover:bg-surface-container-highest transition-colors">TAMBAH KE KERANJANG</button>
+          </div>
+          <hr class="border-outline-variant/30 my-2" />
+          <div class="flex flex-col gap-1">
+            <label class="font-label-caps text-on-surface-variant">METODE BAYAR</label>
+            <select id="paymentMethod" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white">
+              <option value="Cash">Cash</option>
+              <option value="QRIS">QRIS</option>
+              <option value="Debit">Debit</option>
+              <option value="E-Wallet">E-Wallet</option>
+            </select>
+          </div>
+          <div class="mt-2">
+            <button type="submit" class="w-full bg-primary text-white px-4 py-3 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors">BUAT PESANAN</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Cart -->
+      <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40 flex flex-col">
+        <h3 class="font-headline-md text-primary mb-4">Keranjang</h3>
+        <div id="cartList" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-2 min-h-[150px]">
+          <div class="flex items-center justify-center h-full text-on-surface-variant text-sm bg-surface-container-lowest border border-dashed border-outline-variant rounded-lg">Belum ada item.</div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-outline-variant/30 flex justify-between items-center">
+          <span class="font-label-caps text-on-surface-variant">TOTAL BAYAR</span>
+          <strong id="cartTotal" class="font-numeric-data text-headline-md text-primary">Rp 0</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <h3 class="font-headline-md text-primary mb-3">History Transaction</h3>
+    <div class="bg-white rounded-lg card-shadow border border-outline-variant/40 overflow-hidden mb-6">
+      <div class="overflow-x-auto overflow-y-auto max-h-[400px] custom-scrollbar relative">
+        <table class="w-full text-left border-collapse min-w-[800px]">
+          <thead class="sticky top-0 z-10 bg-surface-container-low shadow-sm">
+            <tr class="border-b border-outline-variant/30">
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">ID</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">PELANGGAN</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">KASIR</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">STATUS</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">TOTAL</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">BAYAR</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant text-right">AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="orderTable" class="divide-y divide-outline-variant/10 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: INGREDIENTS -->
+  <section data-view="ingredients" id="view-ingredients" class="mt-4">
+    <div class="flex justify-between items-end border-b border-outline-variant/30 pb-4 mb-6">
+      <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Data Bahan Baku</h2>
+      <button onclick="resetIngForm()" class="text-xs bg-surface-container-high px-3 py-1.5 rounded-lg font-bold border border-outline-variant hover:bg-surface-container-highest transition-colors">RESET FORM</button>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40 mb-6">
+      <form id="ingForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <input type="hidden" id="ingId" />
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">NAMA BAHAN</label>
+          <input type="text" id="ingName" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="Biji Kopi Arabika" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">STOK</label>
+          <input type="number" id="ingStock" min="0" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="1000" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">SATUAN</label>
+          <input type="text" id="ingUnit" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="Gram" />
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-primary text-white px-5 py-2 rounded-lg font-bold text-sm w-full hover:bg-primary/90 transition-colors">SIMPAN BAHAN</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-white rounded-lg card-shadow border border-outline-variant/40 overflow-hidden">
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[600px]">
+          <thead>
+            <tr class="bg-surface-container-low border-b border-outline-variant/30">
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">ID</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">NAMA BAHAN</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">STOK</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant text-right">AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="ingTable" class="divide-y divide-outline-variant/10 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: TABLES (MEJA) -->
+  <section data-view="tables" id="view-tables" class="mt-4">
+    <div class="flex justify-between items-end border-b border-outline-variant/30 pb-4 mb-6">
+      <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Data Meja</h2>
+      <button onclick="resetTableForm()" class="text-xs bg-surface-container-high px-3 py-1.5 rounded-lg font-bold border border-outline-variant hover:bg-surface-container-highest transition-colors">RESET FORM</button>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40 mb-6">
+      <form id="tableForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <input type="hidden" id="tableId" />
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">NOMOR MEJA</label>
+          <input type="number" id="tableNumber" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="1" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">KAPASITAS (ORANG)</label>
+          <input type="number" id="tableCapacity" min="1" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="4" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">STATUS</label>
+          <select id="tableStatus" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white">
+            <option value="Available">Available</option>
+            <option value="Occupied">Occupied</option>
+          </select>
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-primary text-white px-5 py-2 w-full rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors">SIMPAN MEJA</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-white rounded-lg card-shadow border border-outline-variant/40 overflow-hidden">
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[600px]">
+          <thead>
+            <tr class="bg-surface-container-low border-b border-outline-variant/30">
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">ID</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">NOMOR MEJA</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">KAPASITAS</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">STATUS</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant text-right">AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="mejaTable" class="divide-y divide-outline-variant/10 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: BARISTAS -->
+  <section data-view="baristas" id="view-baristas" class="mt-4">
+    <div class="flex justify-between items-end border-b border-outline-variant/30 pb-4 mb-6">
+      <h2 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Data Barista / Kasir</h2>
+      <button onclick="resetBaristaForm()" class="text-xs bg-surface-container-high px-3 py-1.5 rounded-lg font-bold border border-outline-variant hover:bg-surface-container-highest transition-colors">RESET FORM</button>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg card-shadow border border-outline-variant/40 mb-6">
+      <form id="baristaForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <input type="hidden" id="baristaId" />
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">NAMA BARISTA</label>
+          <input type="text" id="baristaName" required class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="Ahmad" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">SHIFT</label>
+          <select id="baristaShift" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary bg-white">
+            <option value="Pagi">Pagi</option>
+            <option value="Siang">Siang</option>
+            <option value="Malam">Malam</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-on-surface-variant">NO HP</label>
+          <input type="text" id="baristaPhone" class="border border-outline-variant rounded-lg p-2 text-sm outline-none focus:border-primary" placeholder="08..." />
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-primary text-white px-5 py-2 w-full rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors">SIMPAN BARISTA</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-white rounded-lg card-shadow border border-outline-variant/40 overflow-hidden">
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse min-w-[600px]">
+          <thead>
+            <tr class="bg-surface-container-low border-b border-outline-variant/30">
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">ID</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">NAMA BARISTA</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">SHIFT</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant">NO HP</th>
+              <th class="py-3 px-4 font-label-caps text-[11px] text-on-surface-variant text-right">AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="baristaTable" class="divide-y divide-outline-variant/10 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Order Detail Modal -->
+<div id="orderModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl max-w-lg w-full card-shadow flex flex-col max-h-[90vh]">
+    <div class="flex justify-between items-center p-5 border-b border-outline-variant/30">
+      <h3 class="font-headline-md text-primary">Detail Pesanan #<span id="modalOrderId"></span></h3>
+      <button onclick="closeModal()" class="material-symbols-outlined text-on-surface-variant hover:text-primary">close</button>
+    </div>
+    <div class="p-5 overflow-y-auto custom-scrollbar flex-1 text-sm text-on-surface-variant">
+      <div id="modalOrderItems" class="flex flex-col gap-3">
+        <!-- populated by js -->
+      </div>
+    </div>
+    <div class="p-5 border-t border-outline-variant/30 bg-surface-container-lowest flex justify-between items-center">
+      <span class="font-bold text-primary">TOTAL</span>
+      <span id="modalOrderTotal" class="font-numeric-data text-headline-md text-primary">Rp 0</span>
+    </div>
+    <div class="p-5 pt-0 bg-surface-container-lowest rounded-b-xl flex gap-3 justify-end">
+      <button onclick="printReceipt()" class="bg-primary text-white px-5 py-2 rounded-lg font-bold text-sm w-full md:w-auto hover:bg-primary/90 transition-colors flex justify-center items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">print</span>
+        CETAK STRUK
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
